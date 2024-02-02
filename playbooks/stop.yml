@@ -1,0 +1,10 @@
+---
+- name: Stop OpenShift Local
+  hosts: all
+  connection: local
+
+  tasks:
+    - name: Stop
+      ansible.builtin.include_role:
+        name: manager
+        tasks_from: stop

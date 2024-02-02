@@ -1,0 +1,10 @@
+---
+- name: Prepare OpenShift Local
+  hosts: all
+  connection: local
+
+  tasks:
+    - name: Prepare
+      ansible.builtin.include_role:
+        name: manager
+        tasks_from: prepare

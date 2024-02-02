@@ -1,0 +1,10 @@
+---
+- name: Start OpenShift Local
+  hosts: all
+  connection: local
+
+  tasks:
+    - name: Start
+      ansible.builtin.include_role:
+        name: manager
+        tasks_from: start
