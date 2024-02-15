@@ -11,8 +11,8 @@ None
 Install the collection and then run the playbooks from anywhere.
 
 ```shell
-# Install collection
-ansible-galaxy collection install ansiblejunky.openshift_local
+# Install collection into your collection path
+git clone git@github.com:ansiblejunky/ansible_collection_openshift_local.git
 
 # Prepare crc
 ansible-playbook ansiblejunky.openshift_local.prepare
