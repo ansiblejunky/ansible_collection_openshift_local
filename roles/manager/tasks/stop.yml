@@ -1,7 +1,0 @@
----
-- name: Stop the instance
-  command: crc stop -o json
-  register: result
-
-- debug:
-    var: result

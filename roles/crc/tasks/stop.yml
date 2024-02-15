@@ -1,0 +1,9 @@
+---
+- name: Stop the instance
+  ansible.builtin.command: crc stop -o json
+  changed_when: true
+  register: result
+
+- name: Debug results
+  ansible.builtin.debug:
+    var: result

@@ -1,10 +1,11 @@
 ---
 - name: Start OpenShift Local
-  hosts: all
+  hosts: localhost
   connection: local
+  gather_facts: true
 
   tasks:
     - name: Start
       ansible.builtin.include_role:
-        name: manager
+        name: crc
         tasks_from: start

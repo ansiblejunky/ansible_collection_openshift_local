@@ -1,9 +1,0 @@
----
-- name: Delete local instance
-  command: crc delete -f
-
-- name: Undo all the configuration changes done by 'crc setup' command
-  command: crc cleanup
-
-- name: Remove preferences
-  shell: rm -rf ~/.crc

@@ -1,0 +1,19 @@
+---
+- name: Delete local instance
+  ansible.builtin.command: crc delete -f
+  changed_when: true
+  register: result
+  ignore_errors: true
+
+- name: Error
+  ansible.builtin.fail:
+    msg: Machine does not exist
+  when: result.stderr is search("Machine does not exist")
+
+- name: Undo all the configuration changes done by 'crc setup' command
+  ansible.builtin.command: crc cleanup
+  changed_when: true
+
+- name: Remove preferences
+  ansible.builtin.command: rm -rf ~/.crc
+  changed_when: true

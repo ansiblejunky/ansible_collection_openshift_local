@@ -1,0 +1,7 @@
+---
+crc_package: crc-macos-installer.pkg
+crc_download_url: "https://mirror.openshift.com/pub/openshift-v4/clients/crc/latest/{{ crc_package }}"
+crc_download_dest: "/tmp"
+crc_download_dest_path: "{{ crc_download_dest }}/{{ crc_package }}"
+crc_macos_volume: "/Volumes/Macintosh HD"
+crc_completion: 'crc completion zsh > $(brew --prefix)/share/zsh/site-functions/_crc'

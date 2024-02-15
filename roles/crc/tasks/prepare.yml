@@ -1,0 +1,80 @@
+---
+- name: Ensure pull secret file exists
+  ansible.builtin.stat:
+    path: "{{ crc_config_pull_secret_file }}"
+  register: result
+
+- name: Fail if pull secret not found
+  ansible.builtin.fail:
+    msg: "Pull secret not found at {{ crc_config_pull_secret_file }}"
+  when: not result.stat.exists
+
+# TODO: Download pull secret: https://console.redhat.com/openshift/create/local
+# https://access.redhat.com/solutions/4844461
+# <get pull secret? leverage openshift API https://api.openshift.com/>
+# https://api.openshift.com/api/accounts_mgmt/v1/access_token
+
+# Release Notes https://github.com/code-ready/crc/releases
+# TODO: check if `crc` binary does not exist or its outdated `crc version` shows `WARN A new version` then...
+# upgrading crc may require `crc delete`
+
+- name: Ensure proper installation
+  ansible.builtin.command: crc version
+  changed_when: false
+  register: result
+
+- name: Get current state
+  ansible.builtin.set_fact:
+    crc_exists: "{{ result.stdout.find('CRC version:') != -1 }}"
+    crc_latest: "{{ result.stdout.find('WARN') == -1 }}"
+
+- name: Install or upgrade crc software if necessary
+  when: not crc_exists or not crc_latest
+  block:
+    - name: Download crc package
+      ansible.builtin.get_url:
+        url: "{{ crc_download_url }}"
+        dest: "{{ crc_download_dest }}"
+        mode: "u+rw"
+
+    - name: Install crc package [Mac OS]
+      ansible.builtin.command: "installer -pkg {{ crc_download_dest_path }} -target '{{ crc_macos_volume }}'"
+      changed_when: true
+      when: ansible_os_family == "Darwin"
+      become: true
+
+    - name: Remove package
+      ansible.builtin.file:
+        path: "{{ crc_download_dest_path }}"
+        state: absent
+
+- name: Configure crc command completion
+  ansible.builtin.command:
+    cmd: "{{ crc_completion }}"
+    creates: /opt/homebrew/share/zsh/site-functions/_crc
+  changed_when: true
+  register: result
+
+- name: Set configuration properties
+  ansible.builtin.command: "crc config set {{ item }}"
+  changed_when: true
+  with_items: "{{ crc_config }}"
+
+# Prepare and create ~/.crc directory if not already existing
+- name: Prepare local virtualization and networking infrastructure
+  ansible.builtin.command: crc setup
+  changed_when: true
+  register: result
+
+- name: Debug output
+  ansible.builtin.debug:
+    var: result.stdout_lines
+
+- name: Display configuration
+  ansible.builtin.command: crc config view
+  changed_when: false
+  register: result
+
+- name: Debug output
+  ansible.builtin.debug:
+    var: result.stdout_lines

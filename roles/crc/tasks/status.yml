@@ -1,9 +1,11 @@
 ---
 - name: Show details about the running instance
-  command: crc status -o json
+  ansible.builtin.command: crc status -o json
+  changed_when: false
   register: result
 
-- debug:
+- name: Debug results
+  ansible.builtin.debug:
     var: result
 
 # - Status on OpenShift objects

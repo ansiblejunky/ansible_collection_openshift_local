@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: "crc"
+  standalone: false
+  company: "Red Hat"
+  description: "Ansible Role to manage crc openshift local instance"
+  author: John Wadleigh
+  license: "GPL-3.0-or-later"
+  min_ansible_version: "2.12"
+  platforms:
+    - name: "EL"
+      versions:
+        - "8"
+        - "9"
+    - name: "Fedora"
+      versions:
+        - "all"
+  galaxy_tags:
+    - "application"
+    - "crc"
+    - "openshift"
+dependencies: []
