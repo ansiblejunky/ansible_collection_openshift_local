@@ -6,17 +6,33 @@ Ansible Collection to manage OpenShift Local instance.
 
 None
 
-## Testing
+## Using
 
-The test playbook uses extra variable `mode` to allow easily testing each of the task files. An example of runing the `configure` mode:
+Install the collection and then run the playbooks from anywhere.
 
 ```shell
-ansible-playbook tests/test.yml -i tests/inventory -c local -e mode=configure
+# Install collection
+ansible-galaxy collection install ansiblejunky.openshift_local
+
+# Prepare crc
+ansible-playbook ansiblejunky.openshift_local.prepare
+# Start crc
+ansible-playbook ansiblejunky.openshift_local.start
+# Check status
+ansible-playbook ansiblejunky.openshift_local.status
+
+... do cool things ...
+
+# Stop crc
+ansible-playbook ansiblejunky.openshift_local.stop
+# Delete crc
+ansible-playbook ansiblejunky.openshift_local.delete
+
 ```
 
 ## License
 
-BSD
+GPLv3
 
 ## Author
 
